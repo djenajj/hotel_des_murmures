@@ -1,0 +1,24 @@
+#BlueJ class context
+comment0.target=Hotel
+comment0.text=\r\n\ D\u00E9crivez\ votre\ classe\ Hotel\ ici.\r\n\r\n\ @author\ Djena\r\n\ @version\ 1.0\r\n
+comment1.params=
+comment1.target=Hotel()
+comment10.params=nombreNuits
+comment10.target=double\ calculerPrixSejour(int)
+comment2.params=chambres\ tarif
+comment2.target=Hotel(int,\ double)
+comment3.params=
+comment3.target=int\ getNombreChambres()
+comment4.params=
+comment4.target=double\ getTarifNuit()
+comment5.params=
+comment5.target=Repas\ getRepas()
+comment6.params=nombre
+comment6.target=void\ setNombreChambres(int)
+comment7.params=tarif
+comment7.target=void\ setTarifNuit(double)
+comment8.params=repas
+comment8.target=void\ setRepas(Repas)
+comment9.params=nouvellesChambres
+comment9.target=void\ renoverHotel(int)
+numComments=11

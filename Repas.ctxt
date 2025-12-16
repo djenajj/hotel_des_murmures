@@ -1,0 +1,18 @@
+#BlueJ class context
+comment0.target=Repas
+comment0.text=\r\n\ Classe\ Repas\ -\ Repr\u00E9sente\ un\ repas\ propos\u00E9\ par\ l'h\u00F4tel\r\n\ \r\n\ @author\ Djena\r\n\ @version\ 1.0\r\n
+comment1.params=type\ prix
+comment1.target=Repas(java.lang.String,\ double)
+comment1.text=\r\n\ Constructeur\r\n
+comment2.params=
+comment2.target=java.lang.String\ getTypeRepas()
+comment3.params=
+comment3.target=double\ getPrix()
+comment4.params=type
+comment4.target=void\ setTypeRepas(java.lang.String)
+comment5.params=prix
+comment5.target=void\ setPrix(double)
+comment6.params=
+comment6.target=void\ afficherRepas()
+comment6.text=\r\n\ Affiche\ les\ infos\ du\ repas\r\n
+numComments=7
