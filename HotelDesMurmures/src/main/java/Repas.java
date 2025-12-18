@@ -1,37 +1,63 @@
-
 /**
- * * @author Djena
- * @version 1.0
+ * @author Djena
+ * @version 1.2
  */
-
 public class Repas {
-    private String typeRepas; 
-    private double prix;       
 
-    public Repas(String type, double prix) {
+    private String nom;
+    private double prix;
+    private Hotel hotel;
+
+    public Repas(String nom, double prix) {
         if (prix < 0) {
-            throw new IllegalArgumentException("Le prix du repas ne peut pas être négatif");
+            throw new IllegalArgumentException("Le prix du repas ne peut pas être négatif.");
         }
-        this.typeRepas = type;
+        this.nom = nom;
         this.prix = prix;
     }
 
-    public String getTypeRepas() {
-        return typeRepas;
+    public void lierAHotel(Hotel nouvelHotel) {
+        
+        if (this.hotel == nouvelHotel) {
+            return;
+        }
+
+        this.hotel = nouvelHotel;
+
+        if (nouvelHotel != null) {
+            nouvelHotel.ajouterRepas(this);
+        }
     }
 
-    public void setTypeRepas(String type) {
-        this.typeRepas = type;
+    public String getNom() {
+        return nom;
     }
 
     public double getPrix() {
         return prix;
     }
 
+    public Hotel getHotel() {
+        return hotel;
+    }
+
+    public void setNom(String nom) {
+    if (nom == null || nom.trim().isEmpty()) {
+        throw new IllegalArgumentException(
+            "Le nom du repas ne peut pas être nul ou vide"
+        );
+    }
+    
+    this.nom = nom;
+    }
+
     public void setPrix(double prix) {
         if (prix < 0) {
-            throw new IllegalArgumentException("Le prix ne peut pas être négatif");
+            throw new IllegalArgumentException(
+                "Le prix du repas ne peut pas être négatif"
+            );
         }
         this.prix = prix;
     }
+
 }

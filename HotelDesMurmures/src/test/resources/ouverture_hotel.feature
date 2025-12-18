@@ -1,22 +1,34 @@
-Feature: Gestion de l'ouverture et des tarifs
+Feature: Gestion de l'hébergement et de la restauration
   En tant que gérant de l'Hôtel des Murmures
-  Je veux m'assurer que l'hôtel est correctement configuré
-  Afin d'éviter des erreurs de tarification dès l'ouverture
+  Je veux proposer une tarification claire incluant les services de restauration
+  Afin d'offrir une expérience client fluide et sans erreur de facturation
 
-  # Scénario simple
-  Scenario: Initialisation légitime de l'hôtel
-    Given un nouvel hôtel prêt à ouvrir
-    Then l'hôtel doit avoir des chambres disponibles
-    And le tarif de base ne doit pas être gratuit
+  Background:
+    Given un hôtel nommé "Hôtel des Murmures"
+    And l'hôtel est configuré avec 10 chambres
+    And le tarif par nuit est fixé à 100.0 euros
 
-  # Scénario avec paramètres
-  Scenario Outline: Calcul du prix avec différentes options
-    Given un hôtel configuré avec "<chambres>" chambres et "<prix_nuit>" euros
-    And le client réserve pour "<nuits>" nuits
-    When le système calcule le prix total
-    Then le montant affiché doit être de "<total>" euros
+
+  Scenario: Initialisation conforme de l'hôtel
+    Then l'hôtel doit disposer de 10 chambres
+    And le tarif par nuit doit être strictement supérieur à 0
+    And aucun repas ne doit être enregistré dans le catalogue de l'hôtel
+
+
+  Scenario Outline: Calcul du prix total du séjour incluant la restauration
+    Given un repas nommé "<nom_repas>" est proposé au prix de <prix_repas> euros
+    And le repas est ajouté au catalogue de l'hôtel
+    And le client effectue une réservation de <nuits> nuits
+    When le gérant calcule le prix total du séjour
+    Then le montant total doit être égal à <total> euros
 
     Examples:
-      | chambres | prix_nuit | nuits | total |
-      | 10       | 100.0     | 2     | 200.0 |
-      | 5        | 50.0      | 3     | 150.0 |
+      | nom_repas   | prix_repas | nuits | total |
+      | Dîner       | 50.0       | 2     | 300.0 |
+      | Petit-déj   | 10.0       | 2     | 220.0 |
+      | Aucun       | 0.0        | 3     | 300.0 |
+
+  Scenario: Cohérence de l'association entre l'hôtel et les repas
+    When un repas nommé "Dîner de Gala" est ajouté au catalogue de l'hôtel
+    Then le repas "Dîner de Gala" doit apparaître dans la liste des services de l'hôtel
+    And l'hôtel doit être identifié comme le prestataire du repas "Dîner de Gala"

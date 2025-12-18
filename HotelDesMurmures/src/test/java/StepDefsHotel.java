@@ -1,46 +1,88 @@
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import static org.junit.Assert.*;
 
 public class StepDefsHotel {
+
     private Hotel hotel;
+    private Repas dernierRepas;
     private double prixCalcule;
+    private int nuits;
 
-    // Scénario simple
-
-    @Given("un nouvel hôtel prêt à ouvrir")
-    public void un_nouvel_hotel_pret_a_ouvrir() {
-        hotel = new Hotel(10, 80.0);
+    @Given("un hôtel nommé {string}")
+    public void un_hotel_nomme(String nom) {
+        hotel = new Hotel(0, 1.0); 
     }
 
-    @Then("l'hôtel doit avoir des chambres disponibles")
-    public void l_hotel_doit_avoir_des_chambres_disponibles() {
-        assertTrue(hotel.getNombreChambres() > 0);
+    @Given("l'hôtel est configuré avec {int} chambres")
+    public void hotel_configure(int chambres) {
+        hotel.setNombreChambres(chambres);
     }
 
-    @Then("le tarif de base ne doit pas être gratuit")
-    public void le_tarif_de_base_ne_doit_pas_etre_gratuit() {
-        assertTrue(hotel.getTarifNuit() > 0);
+    @Given("le tarif par nuit est fixé à {double} euros")
+    public void tarif_fixe(double tarif) {
+        hotel.setTarifNuit(tarif);
+    }
+
+    @Then("l'hôtel doit disposer de {int} chambres")
+    public void verifier_chambres(int attendu) {
+        assertEquals(attendu, hotel.getNombreChambres());
+    }
+
+    @Then("le tarif par nuit doit être strictement supérieur à {int}")
+    public void verifier_tarif(int zero) {
+        assertTrue(hotel.getTarifNuit() > zero);
+    }
+
+    @Then("aucun repas ne doit être enregistré dans le catalogue de l'hôtel")
+    public void aucun_repas() {
+        assertTrue(hotel.getRepasProposes().isEmpty());
+    }
+
+    @Given("un repas nommé {string} est proposé au prix de {double} euros")
+    public void repas_propose(String nom, double prix) {
+        dernierRepas = new Repas(nom, prix);
+    }
+
+    @Given("le repas est ajouté au catalogue de l'hôtel")
+    public void ajouter_repas() {
+        if (dernierRepas.getPrix() > 0) {
+            hotel.ajouterRepas(dernierRepas);
+        }
+    }
+
+    @Given("le client effectue une réservation de {int} nuits")
+    public void reserver(int nuits) {
+        this.nuits = nuits;
+    }
+
+    @When("le gérant calcule le prix total du séjour")
+    public void calculer_prix() {
+        prixCalcule = hotel.calculerPrixSejour(nuits);
+    }
+
+    @Then("le montant total doit être égal à {double} euros")
+    public void verifier_prix(double attendu) {
+        assertEquals(attendu, prixCalcule, 0.01);
     }
 
 
-    @Given("un hôtel configuré avec {string} chambres et {string} euros")
-    public void un_hotel_configure(String chambres, String prix) {
-        hotel = new Hotel(Integer.parseInt(chambres), Double.parseDouble(prix));
+    @When("un repas nommé {string} est ajouté au catalogue de l'hôtel")
+    public void ajout_direct(String nom) {
+        dernierRepas = new Repas(nom, 50.0);
+        hotel.ajouterRepas(dernierRepas);
     }
 
-    @Given("le client réserve pour {string} nuits")
-    public void le_client_reserve(String nuits) {
-        this.prixCalcule = hotel.calculerPrixSejour(Integer.parseInt(nuits));
+    @Then("le repas {string} doit apparaître dans la liste des services de l'hôtel")
+    public void repas_present(String nom) {
+        assertTrue(hotel.getRepasProposes().contains(dernierRepas));
     }
 
-    @When("le système calcule le prix total")
-    public void le_systeme_calcule_le_prix_total() {
-    }
-
-    @Then("le montant affiché doit être de {string} euros")
-    public void le_montant_affiche_doit_etre(String totalAttendu) {
-        assertEquals(Double.parseDouble(totalAttendu), prixCalcule, 0.01);
+    @Then("l'hôtel doit être identifié comme le prestataire du repas {string}")
+    public void lien_bidirectionnel(String nom) {
+        assertEquals(hotel, dernierRepas.getHotel());
     }
 }
